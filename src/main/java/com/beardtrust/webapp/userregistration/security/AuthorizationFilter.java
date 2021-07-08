@@ -1,12 +1,16 @@
 package com.beardtrust.webapp.userregistration.security;
 
 
+import com.beardtrust.webapp.userregistration.dtos.UserDTO;
+import com.beardtrust.webapp.userregistration.services.AuthorizationService;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -16,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Authorization filter.
@@ -25,17 +30,20 @@ import java.util.ArrayList;
 @Slf4j
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 	private final Environment environment;
+	private final AuthorizationService authorizationService;
 
 	/**
 	 * Instantiates a new Authorization filter.
 	 *
 	 * @param authenticationManager the authentication manager
 	 * @param environment           the environment
+	 * @param authorizationService
 	 */
 	@Autowired
-	public AuthorizationFilter(AuthenticationManager authenticationManager, Environment environment) {
+	public AuthorizationFilter(AuthenticationManager authenticationManager, Environment environment, AuthorizationService authorizationService) {
 		super(authenticationManager);
 		this.environment = environment;
+		this.authorizationService = authorizationService;
 	}
 
 	@Override
@@ -46,11 +54,13 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
 		if (authorizationHeader != null && authorizationHeader.startsWith(environment.getProperty("authorization" +
 				".token.header.prefix"))) {
+			log.info("Filtering new request");
 			UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
+		} else {
+			log.error("Incoming request missing required components");
 		}
-		System.out.println("Authorization header: " + authorizationHeader);
 		chain.doFilter(request, response);
 	}
 
@@ -61,6 +71,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 	 * @return
 	 */
 	private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
+		log.info("Validating requester authorization");
 		String authorizationHeader = request.getHeader(environment.getProperty("authorization.token.header.name"));
 		UsernamePasswordAuthenticationToken authenticationToken = null;
 		if (authorizationHeader != null) {
@@ -72,13 +83,17 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 					.parseClaimsJws(token)
 					.getBody()
 					.getSubject();
-
+			System.out.println(userId);
 			if (userId != null) {
-				authenticationToken = new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>());
+				UserDTO userDTO = authorizationService.getUserByUserId(userId);
+				SimpleGrantedAuthority admin = new SimpleGrantedAuthority(userDTO.getRole());
+				List<GrantedAuthority> authorities = new ArrayList<>();
+				authorities.add(admin);
+				authenticationToken = new UsernamePasswordAuthenticationToken(userId, null, authorities);
+			} else {
+				log.error("Unable to validate requester's authorization");
 			}
 		}
 		return authenticationToken;
 	}
-
-
 }

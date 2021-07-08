@@ -1,8 +1,8 @@
 package com.beardtrust.webapp.userregistration.services;
 
-import com.beardtrust.webapp.userregistration.entities.User;
-import com.beardtrust.webapp.userregistration.entities.UserDTO;
-import com.beardtrust.webapp.userregistration.entities.UserRegistration;
+import com.beardtrust.webapp.userregistration.dtos.UserDTO;
+import com.beardtrust.webapp.userregistration.entities.UserEntity;
+import com.beardtrust.webapp.userregistration.models.UserRegistration;
 import com.beardtrust.webapp.userregistration.repos.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 /**
- * The type User registration service.
+ * The type UserEntity registration service.
  *
  * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
  */
@@ -29,7 +29,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	private final PasswordEncoder passwordEncoder;
 
 	/**
-	 * Instantiates a new User registration service.
+	 * Instantiates a new UserEntity registration service.
 	 *
 	 * @param userRepository  the user repository
 	 * @param passwordEncoder the password encoder
@@ -50,22 +50,22 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 			modelMapper.getConfiguration()
 					.setMatchingStrategy(MatchingStrategies.STRICT);
 			user = modelMapper.map(userRepository.save(modelMapper
-					.map(userRegistration, User.class)), UserDTO.class);
+					.map(userRegistration, UserEntity.class)), UserDTO.class);
 		} catch (Exception e) {
 			log.error("Failed to save user " + userRegistration.getUsername() + " to database");
 			e.printStackTrace();
 		}
-		log.info("User " + userRegistration.getUsername() + " saved to database");
+		log.info("UserEntity " + userRegistration.getUsername() + " saved to database");
 		return user;
 	}
 
 	@Override
 	public UserDTO displayUser(String userId) {
 		log.info("Looking up details for user " + userId);
-		Optional<User> user = userRepository.findById(userId);
+		Optional<UserEntity> user = userRepository.findById(userId);
 		UserDTO userDetails = null;
 		if (user.isPresent()) {
-			log.info("User " + user.get().getUserId() + " located in database");
+			log.info("UserEntity " + user.get().getUserId() + " located in database");
 			ModelMapper modelMapper = new ModelMapper();
 			userDetails = modelMapper.map(user.get(), UserDTO.class);
 		}
@@ -74,18 +74,18 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
 	@Override
 	public UserDTO getUserDetailsByEmail(String username) {
-		User user = userRepository.findByEmail(username);
+		UserEntity user = userRepository.findByEmail(username);
 
-		if(user == null) throw new UsernameNotFoundException(username);
+		if (user == null) throw new UsernameNotFoundException(username);
 
 		return new ModelMapper().map(user, UserDTO.class);
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-		User user = userRepository.findByEmail(s);
+		UserEntity user = userRepository.findByEmail(s);
 
-		if(user == null) throw new UsernameNotFoundException(s);
+		if (user == null) throw new UsernameNotFoundException(s);
 
 		return new org.springframework.security.core.userdetails.User(user.getEmail(),
 				user.getPassword(), true, true,

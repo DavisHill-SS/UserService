@@ -1,19 +1,17 @@
 package com.beardtrust.webapp.userregistration.controllers;
 
-
-import com.beardtrust.webapp.userregistration.api.UsersApi;
-import com.beardtrust.webapp.userregistration.entities.UserDTO;
-import com.beardtrust.webapp.userregistration.entities.UserRegistration;
+import com.beardtrust.webapp.userregistration.dtos.UserDTO;
+import com.beardtrust.webapp.userregistration.models.UserRegistration;
 import com.beardtrust.webapp.userregistration.services.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-import java.util.List;
 
 /**
  * The type User registration controller.
@@ -22,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @CrossOrigin
-public class UserRegistrationController implements UsersApi {
+public class UserRegistrationController {
 
 	private final UserRegistrationService userRegistrationService;
 
@@ -36,12 +34,11 @@ public class UserRegistrationController implements UsersApi {
 		this.userRegistrationService = userRegistrationService;
 	}
 
-	@Override
-	@Consumes({MediaType.ALL_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	@Consumes({MediaType.ALL_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserRegistration body) {
 		ResponseEntity<UserDTO> response;
 		UserDTO user = userRegistrationService.registerUser(body);
-		if(!user.getUserId().equals("")){
+		if (!user.getUserId().equals("")) {
 			response = new ResponseEntity<>(user, HttpStatus.CREATED);
 		} else {
 			response = new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
@@ -55,11 +52,12 @@ public class UserRegistrationController implements UsersApi {
 	 * @param id the id
 	 * @return the response entity
 	 */
+	@PreAuthorize("hasAuthority('admin') or principal == #id")
 	@GetMapping(path = "/id/{id}")
-	public ResponseEntity<UserDTO> displayUsers(@PathVariable("id")String id){
+	public ResponseEntity<UserDTO> displayUsers(@PathVariable("id") String id) {
 		ResponseEntity<UserDTO> response = null;
 		UserDTO userDetails = userRegistrationService.displayUser(id);
-		if(!userDetails.getUserId().equals("")){
+		if (!userDetails.getUserId().equals("")) {
 			response = new ResponseEntity<>(userDetails, HttpStatus.OK);
 		} else {
 			response = new ResponseEntity<>(userDetails, HttpStatus.I_AM_A_TEAPOT);

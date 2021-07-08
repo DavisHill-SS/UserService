@@ -1,12 +1,11 @@
 package com.beardtrust.webapp.userregistration.services;
 
-import com.beardtrust.webapp.userregistration.entities.User;
-import com.beardtrust.webapp.userregistration.entities.UserDTO;
-import com.beardtrust.webapp.userregistration.entities.UserRegistration;
+import com.beardtrust.webapp.userregistration.dtos.UserDTO;
+import com.beardtrust.webapp.userregistration.models.UserRegistration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
- * The interface User registration service.
+ * The interface UserEntity registration service.
  *
  * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
  */
