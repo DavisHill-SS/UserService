@@ -45,17 +45,16 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	public UserDTO registerUser(UserRegistration userRegistration) {
 		userRegistration.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
 		UserEntity userEntity = userRepository.findByEmail(userRegistration.getEmail());
-		UserDTO user = null;
-		if(userEntity == null){
+		UserDTO userDTO = null;
+		if (userEntity == null) {
 			log.info("Attempting to save user " + userRegistration.getUsername() + " to database");
 			try {
 				ModelMapper modelMapper = new ModelMapper();
 				modelMapper.getConfiguration()
 						.setMatchingStrategy(MatchingStrategies.STRICT);
-				user = modelMapper.map(userRegistration, UserDTO.class);
-				userEntity = modelMapper.map(user, UserEntity.class);
+				userEntity = modelMapper.map(userRegistration, UserEntity.class);
 				userEntity.setUserId(UUID.randomUUID().toString());
-				user = modelMapper.map(userRepository.save(userEntity), UserDTO.class);
+				userDTO = modelMapper.map(userRepository.save(userEntity), UserDTO.class);
 
 			} catch (Exception e) {
 				log.error("Failed to save user " + userRegistration.getUsername() + " to database");
@@ -64,10 +63,10 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 		} else {
 			log.error("User " + userRegistration.getUsername() + " cannot be saved due to duplicate " +
 					"values in database");
-			user = new UserDTO();
+			userDTO = new UserDTO();
 		}
 
-		return user;
+		return userDTO;
 	}
 
 	@Override

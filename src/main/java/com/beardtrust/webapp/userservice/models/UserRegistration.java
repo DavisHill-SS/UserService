@@ -4,6 +4,11 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * The type User registration.
+ *
+ * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
+ */
 @Data
 public class UserRegistration {
 

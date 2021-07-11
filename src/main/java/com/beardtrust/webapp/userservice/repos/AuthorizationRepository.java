@@ -7,6 +7,8 @@ import java.util.Optional;
 
 /**
  * The interface Authorization repository.
+ *
+ * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
  */
 @org.springframework.stereotype.Repository
 public interface AuthorizationRepository extends Repository<UserEntity, String> {

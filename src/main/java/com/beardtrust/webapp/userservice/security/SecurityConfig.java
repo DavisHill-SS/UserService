@@ -1,5 +1,6 @@
 package com.beardtrust.webapp.userservice.security;
 
+import com.beardtrust.webapp.userservice.services.AuthenticationService;
 import com.beardtrust.webapp.userservice.services.AuthorizationService;
 import com.beardtrust.webapp.userservice.services.UserRegistrationService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,20 +29,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserRegistrationService userRegistrationService;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthorizationService authorizationService;
+	private final AuthenticationService authenticationService;
 
 	/**
 	 * Instantiates a new Security config.
-	 * @param environment the environment
+	 *
+	 * @param environment             the environment
 	 * @param userRegistrationService
 	 * @param passwordEncoder
 	 * @param authorizationService
+	 * @param authenticationService
 	 */
 	@Autowired
-	public SecurityConfig(Environment environment, UserRegistrationService userRegistrationService, PasswordEncoder passwordEncoder, AuthorizationService authorizationService) {
+	public SecurityConfig(Environment environment, UserRegistrationService userRegistrationService, PasswordEncoder passwordEncoder, AuthorizationService authorizationService, AuthenticationService authenticationService) {
 		this.environment = environment;
 		this.userRegistrationService = userRegistrationService;
 		this.passwordEncoder = passwordEncoder;
 		this.authorizationService = authorizationService;
+		this.authenticationService = authenticationService;
 	}
 
 	@Description("Configure HTTP Security")
@@ -50,15 +55,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		http.authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/users").hasIpAddress(environment.getProperty("gateway.ip"))
+				.antMatchers(HttpMethod.POST, "/login").hasIpAddress(environment.getProperty("gateway.ip"))
 				.antMatchers("/h2-console/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
-				.addFilter(new AuthorizationFilter(authenticationManager(), environment, authorizationService));
+				.addFilter(new AuthorizationFilter(authenticationManager(), environment, authorizationService))
+				.addFilter(getAuthenticationFilter());
 		http.headers().frameOptions().disable();
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userRegistrationService).passwordEncoder(passwordEncoder);
+	}
+
+	private AuthenticationFilter getAuthenticationFilter() throws Exception {
+		AuthenticationFilter filter = new AuthenticationFilter(authenticationService, environment, authenticationManager());
+		filter.setFilterProcessesUrl(environment.getProperty("login.url.path"));
+
+		return filter;
 	}
 }

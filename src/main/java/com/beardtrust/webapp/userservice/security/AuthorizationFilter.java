@@ -83,13 +83,23 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 					.parseClaimsJws(token)
 					.getBody()
 					.getSubject();
-			System.out.println(userId);
+
 			if (userId != null) {
 				UserDTO userDTO = authorizationService.getUserByUserId(userId);
-				SimpleGrantedAuthority admin = new SimpleGrantedAuthority(userDTO.getRole());
-				List<GrantedAuthority> authorities = new ArrayList<>();
-				authorities.add(admin);
-				authenticationToken = new UsernamePasswordAuthenticationToken(userId, null, authorities);
+
+				if (userDTO != null) {
+					List<GrantedAuthority> authorities = new ArrayList<>();
+
+					if (userDTO.getRole().equals("admin")) {
+						SimpleGrantedAuthority admin = new SimpleGrantedAuthority("admin");
+						authorities.add(admin);
+					} else if (userDTO.getRole().equals("user")) {
+						SimpleGrantedAuthority user = new SimpleGrantedAuthority("user");
+						authorities.add(user);
+					}
+
+					authenticationToken = new UsernamePasswordAuthenticationToken(userId, null, authorities);
+				}
 			} else {
 				log.error("Unable to validate requester's authorization");
 			}
