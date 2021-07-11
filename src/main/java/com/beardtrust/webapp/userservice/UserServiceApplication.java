@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @SpringBootApplication
 @EnableEurekaClient
-public class UserRegistrationServiceApplication {
+public class UserServiceApplication {
 
 	/**
 	 * The entry point of application.
@@ -23,7 +23,7 @@ public class UserRegistrationServiceApplication {
 	 * @param args the input arguments
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(UserRegistrationServiceApplication.class, args);
+		SpringApplication.run(UserServiceApplication.class, args);
 	}
 
 	/**
