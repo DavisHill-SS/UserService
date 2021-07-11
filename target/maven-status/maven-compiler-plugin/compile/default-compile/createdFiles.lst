@@ -1,0 +1,16 @@
+com\beardtrust\webapp\userregistration\entities\User.class
+com\beardtrust\webapp\userregistration\services\UserRegistrationService.class
+com\beardtrust\webapp\userregistration\services\AuthorizationService.class
+com\beardtrust\webapp\userregistration\services\UserRegistrationServiceImpl.class
+com\beardtrust\webapp\userregistration\security\AuthorizationFilter.class
+com\beardtrust\webapp\userregistration\controllers\UserInfoController.class
+com\beardtrust\webapp\userregistration\models\UserRegistration.class
+com\beardtrust\webapp\userregistration\controllers\UserRegistrationController.class
+com\beardtrust\webapp\userregistration\UserRegistrationServiceApplication.class
+com\beardtrust\webapp\userregistration\dtos\UserDTO.class
+com\beardtrust\webapp\userregistration\services\UserInfoService.class
+com\beardtrust\webapp\userregistration\services\AuthorizationServiceImpl.class
+com\beardtrust\webapp\userregistration\entities\UserEntity.class
+com\beardtrust\webapp\userregistration\security\SecurityConfig.class
+com\beardtrust\webapp\userregistration\repos\UserRepository.class
+com\beardtrust\webapp\userregistration\repos\AuthorizationRepository.class
