@@ -1,7 +1,7 @@
-package com.beardtrust.webapp.userregistration.services;
+package com.beardtrust.webapp.userservice.services;
 
-import com.beardtrust.webapp.userregistration.dtos.UserDTO;
-import com.beardtrust.webapp.userregistration.models.UserRegistration;
+import com.beardtrust.webapp.userservice.dtos.UserDTO;
+import com.beardtrust.webapp.userservice.models.UserRegistration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**

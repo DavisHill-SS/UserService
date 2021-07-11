@@ -1,4 +1,4 @@
-package com.beardtrust.webapp.userregistration.entities;
+package com.beardtrust.webapp.userservice.entities;
 
 import lombok.Data;
 

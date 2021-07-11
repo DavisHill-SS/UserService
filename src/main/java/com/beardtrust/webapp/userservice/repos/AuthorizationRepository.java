@@ -1,6 +1,6 @@
-package com.beardtrust.webapp.userregistration.repos;
+package com.beardtrust.webapp.userservice.repos;
 
-import com.beardtrust.webapp.userregistration.entities.UserEntity;
+import com.beardtrust.webapp.userservice.entities.UserEntity;
 import org.springframework.data.repository.Repository;
 
 import java.util.Optional;

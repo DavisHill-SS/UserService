@@ -1,4 +1,4 @@
-package com.beardtrust.webapp.userregistration.models;
+package com.beardtrust.webapp.userservice.models;
 
 import lombok.Data;
 

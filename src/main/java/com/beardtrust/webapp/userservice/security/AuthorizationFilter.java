@@ -1,8 +1,8 @@
-package com.beardtrust.webapp.userregistration.security;
+package com.beardtrust.webapp.userservice.security;
 
 
-import com.beardtrust.webapp.userregistration.dtos.UserDTO;
-import com.beardtrust.webapp.userregistration.services.AuthorizationService;
+import com.beardtrust.webapp.userservice.dtos.UserDTO;
+import com.beardtrust.webapp.userservice.services.AuthorizationService;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

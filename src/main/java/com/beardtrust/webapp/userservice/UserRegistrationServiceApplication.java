@@ -1,4 +1,4 @@
-package com.beardtrust.webapp.userregistration;
+package com.beardtrust.webapp.userservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

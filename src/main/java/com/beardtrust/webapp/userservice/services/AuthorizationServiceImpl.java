@@ -1,8 +1,8 @@
-package com.beardtrust.webapp.userregistration.services;
+package com.beardtrust.webapp.userservice.services;
 
-import com.beardtrust.webapp.userregistration.dtos.UserDTO;
-import com.beardtrust.webapp.userregistration.entities.UserEntity;
-import com.beardtrust.webapp.userregistration.repos.AuthorizationRepository;
+import com.beardtrust.webapp.userservice.dtos.UserDTO;
+import com.beardtrust.webapp.userservice.entities.UserEntity;
+import com.beardtrust.webapp.userservice.repos.AuthorizationRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;

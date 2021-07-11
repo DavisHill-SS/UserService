@@ -1,6 +1,6 @@
-package com.beardtrust.webapp.userregistration.services;
+package com.beardtrust.webapp.userservice.services;
 
-import com.beardtrust.webapp.userregistration.dtos.UserDTO;
+import com.beardtrust.webapp.userservice.dtos.UserDTO;
 
 /**
  * The interface Authorization service.

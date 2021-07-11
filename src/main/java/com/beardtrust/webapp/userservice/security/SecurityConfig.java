@@ -1,8 +1,7 @@
-package com.beardtrust.webapp.userregistration.security;
+package com.beardtrust.webapp.userservice.security;
 
-import com.beardtrust.webapp.userregistration.security.AuthorizationFilter;
-import com.beardtrust.webapp.userregistration.services.AuthorizationService;
-import com.beardtrust.webapp.userregistration.services.UserRegistrationService;
+import com.beardtrust.webapp.userservice.services.AuthorizationService;
+import com.beardtrust.webapp.userservice.services.UserRegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Description;

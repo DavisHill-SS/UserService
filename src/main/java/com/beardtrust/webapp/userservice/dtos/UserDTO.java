@@ -1,4 +1,4 @@
-package com.beardtrust.webapp.userregistration.dtos;
+package com.beardtrust.webapp.userservice.dtos;
 
 import lombok.Data;
 

@@ -1,9 +1,9 @@
-package com.beardtrust.webapp.userregistration.services;
+package com.beardtrust.webapp.userservice.services;
 
-import com.beardtrust.webapp.userregistration.dtos.UserDTO;
-import com.beardtrust.webapp.userregistration.entities.UserEntity;
-import com.beardtrust.webapp.userregistration.models.UserRegistration;
-import com.beardtrust.webapp.userregistration.repos.UserRepository;
+import com.beardtrust.webapp.userservice.dtos.UserDTO;
+import com.beardtrust.webapp.userservice.entities.UserEntity;
+import com.beardtrust.webapp.userservice.models.UserRegistration;
+import com.beardtrust.webapp.userservice.repos.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

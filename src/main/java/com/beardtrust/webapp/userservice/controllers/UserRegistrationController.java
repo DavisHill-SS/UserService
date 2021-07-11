@@ -1,8 +1,8 @@
-package com.beardtrust.webapp.userregistration.controllers;
+package com.beardtrust.webapp.userservice.controllers;
 
-import com.beardtrust.webapp.userregistration.dtos.UserDTO;
-import com.beardtrust.webapp.userregistration.models.UserRegistration;
-import com.beardtrust.webapp.userregistration.services.UserRegistrationService;
+import com.beardtrust.webapp.userservice.dtos.UserDTO;
+import com.beardtrust.webapp.userservice.models.UserRegistration;
+import com.beardtrust.webapp.userservice.services.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
