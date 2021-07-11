@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The type UserEntity registration service.
@@ -43,19 +44,29 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	@Override
 	public UserDTO registerUser(UserRegistration userRegistration) {
 		userRegistration.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
-		log.info("Attempting to save user " + userRegistration.getUsername() + " to database");
+		UserEntity userEntity = userRepository.findByEmail(userRegistration.getEmail());
 		UserDTO user = null;
-		try {
-			ModelMapper modelMapper = new ModelMapper();
-			modelMapper.getConfiguration()
-					.setMatchingStrategy(MatchingStrategies.STRICT);
-			user = modelMapper.map(userRepository.save(modelMapper
-					.map(userRegistration, UserEntity.class)), UserDTO.class);
-		} catch (Exception e) {
-			log.error("Failed to save user " + userRegistration.getUsername() + " to database");
-			e.printStackTrace();
+		if(userEntity == null){
+			log.info("Attempting to save user " + userRegistration.getUsername() + " to database");
+			try {
+				ModelMapper modelMapper = new ModelMapper();
+				modelMapper.getConfiguration()
+						.setMatchingStrategy(MatchingStrategies.STRICT);
+				user = modelMapper.map(userRegistration, UserDTO.class);
+				userEntity = modelMapper.map(user, UserEntity.class);
+				userEntity.setUserId(UUID.randomUUID().toString());
+				user = modelMapper.map(userRepository.save(userEntity), UserDTO.class);
+
+			} catch (Exception e) {
+				log.error("Failed to save user " + userRegistration.getUsername() + " to database");
+			}
+			log.info("UserEntity " + userRegistration.getUsername() + " saved to database");
+		} else {
+			log.error("User " + userRegistration.getUsername() + " cannot be saved due to duplicate " +
+					"values in database");
+			user = new UserDTO();
 		}
-		log.info("UserEntity " + userRegistration.getUsername() + " saved to database");
+
 		return user;
 	}
 

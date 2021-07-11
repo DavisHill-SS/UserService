@@ -19,6 +19,7 @@ import javax.ws.rs.Consumes;
  * @author Matthew Crowell <Matthew.Crowell@Smoothstack.com>
  */
 @RestController
+@RequestMapping(path = "/users")
 @CrossOrigin
 public class UserRegistrationController {
 
@@ -34,14 +35,22 @@ public class UserRegistrationController {
 		this.userRegistrationService = userRegistrationService;
 	}
 
+	/**
+	 * Processes an incoming request to register a new user and routes that request to
+	 * the user registration service.
+	 *
+	 * @param body UserRegistration the user registration request data
+	 * @return ResponseEntity<UserDTO> the new user data and http status code
+	 */
+	@PostMapping
 	@Consumes({MediaType.ALL_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserRegistration body) {
 		ResponseEntity<UserDTO> response;
 		UserDTO user = userRegistrationService.registerUser(body);
-		if (!user.getUserId().equals("")) {
+		if (user.getUserId() != null) {
 			response = new ResponseEntity<>(user, HttpStatus.CREATED);
 		} else {
-			response = new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+			response = new ResponseEntity<>(user, HttpStatus.CONFLICT);
 		}
 		return response;
 	}
